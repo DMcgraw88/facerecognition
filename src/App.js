@@ -6,12 +6,14 @@ import Rank from './Components/Rank/Rank';
 import 'tachyons';
 import './App.css';
 import './index.css';
-import Particles from "react-particles";
+import ParticlesBg from 'particles-bg'
+
 
 
 function App() {
   return (
     <div className="App">
+      <ParticlesBg type="cobweb" bg={true} />
      <Navigation />
      <Logo />
      <Rank/>
