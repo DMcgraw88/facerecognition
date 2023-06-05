@@ -60,7 +60,7 @@ class App extends Component {
 
   onButtonSubmit = () => {
     this.setState({imageUrl: this.state.input})
-       fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/versions/" + "/outputs", returnClarifaiRequestOptions(this.state.input))
+       fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", returnClarifaiRequestOptions(this.state.input))
        .then(response => response.json())
        .then(result => console.log(result));
   }
