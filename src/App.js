@@ -4,6 +4,7 @@ import Logo from './Components/Logo/Logo';
 import FaceRecognition from './Components/FaceRecognition/FaceRecognition';
 import ImageLinkForm from './Components/ImageLinkForm/ImageLinkForm';
 import Rank from './Components/Rank/Rank';
+import Signin from './Components/Signin/Signin'
 import 'tachyons';
 import './App.css';
 import './index.css';
@@ -51,7 +52,8 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      box: {}
+      box: {},
+      route: 'signin'
     }
   }
 
@@ -85,15 +87,24 @@ displayFaceBox = (box) => {
        .catch(err => console.log(err));
   }
 
+  onRouteChange = (route) => {
+    this.setState({route: route});
+  }
+
   render() {
    return (
       <div className="App">
        <ParticlesBg type="cobweb" bg={true} />
-       <Navigation />
+       <Navigation onRouteChange={this.onRouteChange}/>
+       { this.state.route === 'signin'
+       ? <Signin onRouteChange={this.onRouteChange}/>
+       :<div>
        <Logo />
        <Rank/>
        <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
        <FaceRecognition box={this.state.box} imageUrl ={this.state.imageUrl}/>
+      </div>
+      }
       </div>
     );
   }
