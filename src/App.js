@@ -19,7 +19,7 @@ const returnClarifaiRequestOptions = (imageUrl) => {
     const USER_ID = 'dmcgraw-88';       
     const APP_ID = 'test';
     // Change these to whatever model and image URL you want to use
-    const MODEL_ID = 'face-detection';
+    //const MODEL_ID = 'face-detection';
     const IMAGE_URL = imageUrl;
 
     const raw = JSON.stringify({
@@ -99,19 +99,20 @@ displayFaceBox = (box) => {
   }
 
   render() {
+    const { isSignedIn, imageUrl, route, box} = this.state;
    return (
       <div className="App">
        <ParticlesBg type="cobweb" bg={true} />
-       <Navigation isSignedIn={this.state.isSignedIn} onRouteChange={this.onRouteChange}/>
-       { this.state.route === 'home'
+       <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
+       { route === 'home'
        ? <div>
        <Logo />
        <Rank/>
        <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
-       <FaceRecognition box={this.state.box} imageUrl ={this.state.imageUrl}/>
+       <FaceRecognition box={box} imageUrl ={imageUrl}/>
       </div>
       : (
-        this.state.route === 'signin'
+        route === 'signin'
         ?<Signin onRouteChange={this.onRouteChange}/>
         :<Register onRouteChange={this.onRouteChange}/>
       )
