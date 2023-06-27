@@ -55,9 +55,28 @@ class App extends Component {
       imageUrl: '',
       box: {},
       route: 'signin',
-      isSignedIn: false
+      isSignedIn: false,
+      user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: ''
+      }
     }
   }
+
+  loadUser = (data) => {
+    this.setState({user: {
+      id: 'data.id',
+      name: 'data.name',
+      email: 'data.email',
+      entries: data.entries,
+      joined: 'data.joined'
+    }})
+  }
+
+
 
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -73,7 +92,6 @@ class App extends Component {
   }
 
 displayFaceBox = (box) => {
-  console.log(box);
   this.setState({box: box});
 }
 
@@ -86,6 +104,7 @@ displayFaceBox = (box) => {
        fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", returnClarifaiRequestOptions(this.state.input))
        .then(response => response.json())
        .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+       //.then(console.log(response))
        .catch(err => console.log(err));
   }
 
@@ -100,7 +119,7 @@ displayFaceBox = (box) => {
 
   render() {
     const { isSignedIn, imageUrl, route, box} = this.state;
-   return (
+     return (
       <div className="App">
        <ParticlesBg type="cobweb" bg={true} />
        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange}/>
@@ -114,7 +133,7 @@ displayFaceBox = (box) => {
       : (
         route === 'signin'
         ?<Signin onRouteChange={this.onRouteChange}/>
-        :<Register onRouteChange={this.onRouteChange}/>
+        :<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
       )
       }
       </div>
