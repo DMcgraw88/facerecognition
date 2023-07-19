@@ -11,41 +11,6 @@ import './App.css';
 import './index.css';
 import ParticlesBg from 'particles-bg';
 
-const returnClarifaiRequestOptions = (imageUrl) => {
-    // Your PAT (Personal Access Token) can be found in the portal under Authentification
-    const PAT = '54c30b5762af43c384516a81085513eb';
-    // Specify the correct user_id/app_id pairings
-    // Since you're making inferences outside your app's scope
-    const USER_ID = 'dmcgraw-88';       
-    const APP_ID = 'test';
-    // Change these to whatever model and image URL you want to use
-    //const MODEL_ID = 'face-detection';
-    const IMAGE_URL = imageUrl;
-
-    const raw = JSON.stringify({
-      "user_app_id": {
-          "user_id": USER_ID,
-          "app_id": APP_ID
-      },
-      "inputs": [
-          {
-              "data": {
-                  "image": {
-                      "url": IMAGE_URL
-                  }
-              }
-          }
-      ]
-  });
-  return {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key ' + PAT
-    },
-    body: raw
-};
-}
 
 const initialState = {
   input: '',
@@ -79,8 +44,6 @@ class App extends Component {
     }})
   }
 
-
-
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputimage');
@@ -103,8 +66,14 @@ displayFaceBox = (box) => {
   }
 
   onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input})
-       fetch("https://api.clarifai.com/v2/models/" + 'face-detection' + "/outputs", returnClarifaiRequestOptions(this.state.input))
+    this.setState({imageUrl: this.state.input});
+    fetch(`http://localhost:3000/imageurl`, {
+            method: 'post',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({
+                input: this.state.input
+            })
+          })
        .then(response => response.json())
        .then(response => {
         if (response) {
@@ -123,7 +92,6 @@ displayFaceBox = (box) => {
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
-       //.then(console.log(response))
        .catch(err => console.log(err));
   }
 
